@@ -1,0 +1,90 @@
+Azure Setup (Step-by-Step Guide)
+This guide outlines the necessary steps to set up the Azure resources for the churn analytics project.
+
+2.1 Resource Group
+The Resource Group (rg-churn-analytics) will logically organize all the resources related to this project.
+
+Navigate to the Azure Portal.
+
+Search for and select "Resource groups" or click "Create a resource" and then select "Resource group".
+
+Name: rg-churn-analytics
+
+Region: Select a region close to your location for better performance.
+
+Click "Review + create", then "Create".
+
+2.2 Storage Account + Blob Container
+The Storage Account will host the raw dataset as a Blob.
+
+2.2.1 Create Storage Account
+In the Azure Portal, search for and select "Storage accounts", then click "Create".
+
+Resource Group: Select rg-churn-analytics.
+
+Storage Account Name: Choose a globally unique name (e.g., stchurnanalytics[yourinitials]).
+
+Region: Same as the Resource Group.
+
+Performance: Standard
+
+Redundancy (Replication): LRS (Locally-redundant storage)
+
+Advanced (Security): Set Public blob access to Disabled (for security).
+
+Click "Review + create", then "Create".
+
+2.2.2 Create Blob Container & Upload Dataset
+Navigate to your newly created Storage Account.
+
+In the left menu, select "Containers" under "Data storage".
+
+Click "+ Container".
+
+Name: raw
+
+Public access level: Private (no anonymous access)
+
+Click "Create".
+
+Click on the newly created raw container.
+
+Click "Upload" and select the dataset file: WA_Fn-UseC_-Telco-Customer-Churn.csv.
+
+Click "Upload".
+
+2.3 Azure Database for MySQL (Flexible Server) 💾
+A Flexible Server is used to host the relational database for our analytics project.
+
+In the Azure Portal, search for and select "Azure Database for MySQL servers", then click "Create".
+
+Select "Flexible server".
+
+Resource Group: Select rg-churn-analytics.
+
+Server Details:
+
+Server Name: Choose a unique name (e.g., churn-mysql-[yourinitials]). Note this down - the full server name will be: yourservername.mysql.database.azure.com
+
+Region: Same as the Resource Group.
+
+Compute + storage: Select "Burstable" (B-series). You can start with B1ms. Keep default storage.
+
+Administrator Account:
+
+Admin username: Create a user (e.g., aaditi). Note the full username: aaditi@yourservername
+
+Password: Create and confirm a strong password.
+
+Networking:
+
+Select "Public access" (allowed IP addresses).
+
+Under Firewall rules, click "+ Add current client IP address". This is crucial for connecting from your local machine.
+
+Click "Review + create", then "Create".
+
+⚠️ Common Issues & Fixes
+Issue	Cause	Solution
+❌ Error 2005: Unknown MySQL host	Using an incomplete server name.	Use the full FQDN (Fully Qualified Domain Name): yourservername.mysql.database.azure.com.
+❌ Blocked by firewall	Your current IP address is not allowed to connect to the server.	Navigate to Networking in the MySQL server blade and add your client IP address in the Firewall rules.
